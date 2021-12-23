@@ -1,6 +1,7 @@
 # Simple vanity address generator in python
 import multiprocessing
 from time import time
+from urllib import parse
 from algosdk import account
 import algosdk
 import time
@@ -28,8 +29,9 @@ def worker_address_search(i, regexes, q):
                 q.put((False,i))    # send and update on number of attempts failed
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='awesome algorand vanity adress search')
+    parser = argparse.ArgumentParser(description='awesome algorand vanity address search')
     parser.add_argument('--processes', type=int, default='1', help='number of processes to use')
+    parser.add_argument('--regex', type=str)
     args=parser.parse_args()
     print(f"using {args.processes} processes")
     print("SECURITY WARNING - your mnemonic will appear below")
@@ -37,9 +39,10 @@ if __name__ == '__main__':
     print("This controls access to all your funds in the wallet")
     
     ps=[]
-    regexes = \
-    ["[0-9]?N[O0][O0][B8]",
-    "[0-9x]?NC[O0][I1]N"] 
+    #regexes = \
+    #["[0-9]?N[O0][O0][B8]",
+    #"[0-9x]?NC[O0][I1]N"] 
+    regexes=[args.regex]
 
     with multiprocessing.Pool(processes=args.processes) as pool:
         manager = multiprocessing.Manager()
